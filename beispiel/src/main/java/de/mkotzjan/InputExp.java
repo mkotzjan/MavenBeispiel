@@ -1,9 +1,21 @@
 package de.mkotzjan;
 
 import java.util.Scanner;
- 
+
+/**
+ * Program to output an input
+ *
+ * @author mkotzjan
+ * @version 1.0
+ */
+
 public class InputExp {
  
+	/**
+     * Main
+     *
+     * @param args Kommandozeilenparameter
+     */
    public static void main(String[] args) {
  
        System.out.print("Input something: ");
