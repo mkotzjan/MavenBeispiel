@@ -144,15 +144,25 @@ public class ResidentServiceTest {
 		list.add(new Resident("Max", "Mustermann", "Musterstraﬂe", "Musterstadt", new Date()));
 		list.add(new Resident("Martina", "Mustermann", "Albertstraﬂe", "Musterdorf", new Date()));
 		list.add(new Resident("Emil", "Dick", "Waldweg", "Musterdorf", new Date()));
-		ResidentRepository stub = new ResidentRepositoryStub(list);
 		
-		Resident expected = new Resident("Max", "Mustermann", "Musterstraﬂe", "Musterstadt", new Date());
-		ResidentService mock = createMock(ResidentService.class);
-		mock.setResidentRepository(stub);
+		ResidentRepository mock = createMock(ResidentRepository.class);
+		expect(mock.getResidents()).andReturn(list);
+		replay(mock);
+		
+		ResidentService rs = new BaseResidentService();
+		((BaseResidentService) rs).setResidentRepository(mock);
+		
 		try {
-			expect(mock.getUniqueResident(new Resident("Max", "Mustermann", null, null, null))).andReturn(expected);
+			Resident result = rs.getUniqueResident(new Resident("Max", "Mustermann", null, null, null));
+			assertEquals("Max", result.getGivenName());
+			assertEquals("Mustermann", result.getFamilyName());
+			assertEquals("Musterstraﬂe", result.getStreet());
+			assertEquals("Musterstadt", result.getCity());
 		} catch (ResidentServiceException e) {
 			fail(e.getMessage());
+			e.printStackTrace();
 		}
+		
+		verify(mock);
 	}
 }
